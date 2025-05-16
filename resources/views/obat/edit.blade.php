@@ -1,23 +1,23 @@
-<h1>Edit Obat</h1>
+@extends('layouts.app')
 
-<form action="{{ route('obat.update', $obat['id']) }}" method="POST">
-    @csrf
-    @method('PUT')
+@section('title', 'Edit Obat')
 
-    <label>Nama:</label><br>
-    <input type="text" name="nama" value="{{ $obat['nama'] }}"><br><br>
+@section('content')
+    <h1>Edit Obat</h1>
 
-    <label>Jenis:</label><br>
-    <input type="text" name="jenis" value="{{ $obat['jenis'] }}"><br><br>
+    <form>
+        <label>Nama Obat:</label><br>
+        <input type="text" name="nama" value="{{ $obat->nama }}"><br><br>
 
-    <label>Stok:</label><br>
-    <input type="number" name="stok" value="{{ $obat['stok'] }}"><br><br>
+        <label>Stok:</label><br>
+        <input type="number" name="stok" value="{{ $obat->stok }}"><br><br>
 
-    <label>Harga:</label><br>
-    <input type="number" name="harga" value="{{ $obat['harga'] }}"><br><br>
+        <label>Harga:</label><br>
+        <input type="number" name="harga" value="{{ $obat->harga }}"><br><br>
 
-    <button type="submit">Update</button>
-</form>
+        <button type="submit" disabled>Simpan (hanya simulasi)</button>
+    </form>
 
-<br>
-<a href="{{ route('obat.index') }}">← Kembali ke daftar</a>
+    <br>
+    <a href="{{ route('obat.show', $obat->id) }}">← Kembali ke detail</a>
+@endsection

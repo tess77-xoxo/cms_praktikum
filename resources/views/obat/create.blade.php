@@ -1,21 +1,35 @@
-<h1>Tambah Obat</h1>
+@extends('layouts.app')
 
-<form action="{{ route('obat.store') }}" method="POST">
-    @csrf
-    <label>Nama:</label><br>
-    <input type="text" name="nama"><br><br>
+@section('title', 'Tambah Obat')
 
-    <label>Jenis:</label><br>
-    <input type="text" name="jenis"><br><br>
+@section('content')
+<a href="{{ route('obat.create') }}">Tambah Data</a>
 
-    <label>Stok:</label><br>
-    <input type="number" name="stok"><br><br>
+    <form action="{{ route('obat.store') }}" method="POST">
+        @csrf
 
-    <label>Harga:</label><br>
-    <input type="number" name="harga"><br><br>
+        <div>
+            <label for="nama">Nama Obat</label><br>
+            <input type="text" name="nama" id="nama" required>
+        </div>
 
-    <button type="submit">Simpan</button>
-</form>
+        <div>
+            <label for="jenis">Jenis Obat</label><br>
+            <input type="text" name="jenis" id="jenis" required>
+        </div>
 
-<br>
-<a href="{{ route('obat.index') }}">← Kembali ke daftar</a>
+        <div>
+            <label for="stok">Stok</label><br>
+            <input type="number" name="stok" id="stok" required>
+        </div>
+
+        <div>
+            <label for="harga">Harga</label><br>
+            <input type="number" name="harga" id="harga" required>
+        </div>
+
+        <br>
+        <button type="submit">Simpan</button>
+        <a href="{{ route('obat.index') }}">Batal</a>
+    </form>
+@endsection

@@ -23,6 +23,14 @@ class ObatController extends Controller
     // Simpan data obat baru (simulasi)
     public function store(Request $request)
     {
+        $request->validate([
+            'nama_obat' => 'required',
+            'jenis' => 'required',
+            'stok' => 'required|integer',
+            'harga' => 'required|numeric',
+            'expired_date' => 'required|date',
+        ]);
+
         // Dummy: tidak disimpan beneran
         return redirect()->route('obat.index')->with('success', 'Data obat berhasil "disimpan" (simulasi)');
     }
@@ -50,6 +58,17 @@ class ObatController extends Controller
     // Simpan perubahan data (simulasi)
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nama_obat' => 'required',
+            'jenis' => 'required',
+            'stok' => 'required|integer',
+            'harga' => 'required|numeric',
+            'expired_date' => 'required|date',
+        ]);
+
+        $obat = Obat::findOrFail($id);
+        $obat->update($request->all());
+        
         // Dummy: tidak diupdate beneran
         return redirect()->route('obat.index')->with('success', 'Data obat berhasil "diupdate" (simulasi)');
     }
