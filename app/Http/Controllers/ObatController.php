@@ -9,10 +9,11 @@ class ObatController extends Controller
 {
     // Tampilkan semua data obat
     public function index()
-    {
-        $data = Obat::all();
-        return view('obat.index', compact('data'));
-    }
+{
+    $obats = Obat::all();
+    return view('obat.index', compact('obats'));
+}
+
 
     // Tampilkan form tambah obat
     public function create()
@@ -22,18 +23,21 @@ class ObatController extends Controller
 
     // Simpan data obat baru (simulasi)
     public function store(Request $request)
-    {
-        $request->validate([
-            'nama_obat' => 'required',
-            'jenis' => 'required',
-            'stok' => 'required|integer',
-            'harga' => 'required|numeric',
-            'expired_date' => 'required|date',
-        ]);
+{
+    // Validasi input data obat
+    $validated = $request->validate([
+        'nama'  => 'required|string|max:100',
+        'stok'  => 'required|integer|min:1',
+        'harga' => 'required|numeric|min:0',
+    ]);
 
-        // Dummy: tidak disimpan beneran
-        return redirect()->route('obat.index')->with('success', 'Data obat berhasil "disimpan" (simulasi)');
-    }
+    // Simpan data obat ke database
+    \App\Models\Obat::create($validated);
+
+    // Redirect dengan pesan sukses
+    return redirect('/obat')->with('success', 'Data obat berhasil ditambahkan');
+}
+
 
     // Tampilkan detail 1 obat
     public function show($id)

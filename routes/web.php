@@ -2,7 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObatController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\AuthController;
 
+
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return 'Halo, ' . auth()->user()->name;
+    });
+});
+
+Route::get('/upload', [ImageController::class, 'create']);
+Route::post('/upload', [ImageController::class, 'store'])->name('image.upload');
+Route::resource('obat', ObatController::class);
 // Redirect root ke halaman daftar obat
 Route::get('/', function () {
     return redirect('/obat');
@@ -28,3 +46,4 @@ Route::put('/obat/{id}', [ObatController::class, 'update'])->name('obat.update')
 
 // Proses hapus data obat (simulasi)
 Route::delete('/obat/{id}', [ObatController::class, 'destroy'])->name('obat.destroy');
+Route::delete('/obat/{id}', [ObatController::class, 'destroy'])->name('obat.delete');
