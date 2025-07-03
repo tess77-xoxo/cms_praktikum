@@ -24,4 +24,9 @@ class Obat extends Model
     {
         return Obat::where('id', $id)->first();
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'obat_id');
+    }
 }

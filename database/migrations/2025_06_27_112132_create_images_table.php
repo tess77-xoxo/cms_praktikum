@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('obat_id');
+            $table->string('path');
             $table->timestamps();
+
+            $table->foreign('obat_id')->references('id')->on('obat')->onDelete('cascade');
         });
     }
 

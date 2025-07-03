@@ -1,0 +1,51 @@
+/* Custom CSS untuk halaman Obat */
+.custom-card {
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    border: none;
+    transition: box-shadow 0.2s;
+}
+.custom-card:hover {
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.custom-card .card-header {
+    border-radius: 18px 18px 0 0;
+    background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.custom-img {
+    border-radius: 14px 14px 0 0;
+    object-fit: cover;
+}
+.custom-btn {
+    border-radius: 8px;
+    transition: 0.2s;
+}
+.custom-btn-success:hover {
+    background: #00c6ff;
+    color: #fff;
+}
+.custom-btn-secondary:hover {
+    background: #6c757d;
+    color: #fff;
+}
+.custom-btn-outline-primary:hover {
+    background: #007bff;
+    color: #fff;
+}
+.custom-btn-outline-danger:hover {
+    background: #dc3545;
+    color: #fff;
+}
+.custom-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+.img-preview {
+    border-radius: 10px;
+    border: 1px solid #eee;
+    margin: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+} 

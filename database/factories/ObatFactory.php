@@ -14,7 +14,7 @@ class ObatFactory extends Factory
     public function definition(): array
     {
         return [
-            'nama_obat'    => $this->faker->word(['paracetamol', 'amoxilin', 'vitamin']),
+            'nama_obat'    => $this->faker->randomElement(['paracetamol', 'amoxilin', 'vitamin']),
             'jenis'        => $this->faker->randomElement(['Tablet', 'Kapsul', 'Sirup', 'Salep']),
             'stok'         => $this->faker->numberBetween(10, 200),
             'harga'        => $this->faker->randomFloat(2, 1000, 100000),

@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Obat;
+use App\Models\Image;
+use Illuminate\Support\Facades\Storage;
 
 class ObatController extends Controller
 {
     // Tampilkan semua data obat
     public function index()
-{
-    $obats = Obat::all();
-    return view('obat.index', compact('obats'));
-}
-
+    {
+        $obats = Obat::all();
+        return view('obat.index', compact('obats'));
+    }
 
     // Tampilkan form tambah obat
     public function create()
@@ -23,21 +24,39 @@ class ObatController extends Controller
 
     // Simpan data obat baru (simulasi)
     public function store(Request $request)
-{
-    // Validasi input data obat
-    $validated = $request->validate([
-        'nama'  => 'required|string|max:100',
-        'stok'  => 'required|integer|min:1',
-        'harga' => 'required|numeric|min:0',
-    ]);
+    {
+        // Validasi input data obat
+        $validated = $request->validate([
+            'nama'  => 'required|string|max:100',
+            'jenis' => 'required|string|max:100',
+            'stok'  => 'required|integer|min:1',
+            'harga' => 'required|numeric|min:0',
+            'expired_date' => 'required|date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
 
-    // Simpan data obat ke database
-    \App\Models\Obat::create($validated);
+        // Simpan data obat ke database
+        $obat = Obat::create([
+            'nama_obat' => $request->nama,
+            'jenis' => $request->jenis,
+            'stok' => $request->stok,
+            'harga' => $request->harga,
+            'expired_date' => $request->expired_date,
+            // tambahkan field lain jika ada
+        ]);
 
-    // Redirect dengan pesan sukses
-    return redirect('/obat')->with('success', 'Data obat berhasil ditambahkan');
-}
+        // Simpan gambar jika ada
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            Image::create([
+                'obat_id' => $obat->id,
+                'path' => $imagePath,
+            ]);
+        }
 
+        // Redirect dengan pesan sukses
+        return redirect('/obat')->with('success', 'Data obat berhasil ditambahkan');
+    }
 
     // Tampilkan detail 1 obat
     public function show($id)
@@ -68,19 +87,38 @@ class ObatController extends Controller
             'stok' => 'required|integer',
             'harga' => 'required|numeric',
             'expired_date' => 'required|date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $obat = Obat::findOrFail($id);
-        $obat->update($request->all());
-        
-        // Dummy: tidak diupdate beneran
-        return redirect()->route('obat.index')->with('success', 'Data obat berhasil "diupdate" (simulasi)');
+        $obat->update($request->only(['nama_obat', 'jenis', 'stok', 'harga', 'expired_date']));
+
+        // Jika ada upload gambar baru
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            Image::create([
+                'obat_id' => $obat->id,
+                'path' => $imagePath,
+            ]);
+        }
+
+        return redirect()->route('obat.index')->with('success', 'Data obat berhasil diupdate');
     }
 
     // Hapus data obat (simulasi)
     public function destroy($id)
     {
-        // Dummy: tidak dihapus beneran
-        return redirect()->route('obat.index')->with('success', 'Data obat berhasil "dihapus" (simulasi)');
+        $obat = Obat::findOrFail($id);
+
+        // Hapus gambar terkait dari storage dan database
+        foreach ($obat->images as $image) {
+            Storage::disk('public')->delete($image->path);
+            $image->delete();
+        }
+
+        // Hapus data obat
+        $obat->delete();
+
+        return redirect()->route('obat.index')->with('success', 'Data obat berhasil dihapus');
     }
 }
