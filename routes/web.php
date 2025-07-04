@@ -17,11 +17,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return 'Halo, ' . auth()->user()->name;
     });
+    Route::get('/obat/stok', [ObatController::class, 'stok'])->name('obat.stok');
     Route::get('/obat', [ObatController::class, 'index'])->name('obat.index');
     Route::get('/obat/create', [ObatController::class, 'create'])->name('obat.create');
     Route::post('/obat', [ObatController::class, 'store'])->name('obat.store');
     Route::get('/obat/{id}', [ObatController::class, 'show'])->name('obat.show');
     Route::get('/obat/{id}/edit', [ObatController::class, 'edit'])->name('obat.edit');
+    Route::get('/obat/{id}/struk', [ObatController::class, 'struk'])->name('obat.struk');
     Route::put('/obat/{id}', [ObatController::class, 'update'])->name('obat.update');
     Route::delete('/obat/{id}', [ObatController::class, 'destroy'])->name('obat.destroy');
     Route::delete('/obat/{id}', [ObatController::class, 'destroy'])->name('obat.delete');

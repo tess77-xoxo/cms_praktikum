@@ -1,11 +1,12 @@
 @extends('layouts.app')
 @section('title', 'Tambah Obat')
 @section('content')
+<script>document.body.classList.remove('login-apotek-bg','stok-obat-bg');</script>
 <div class="container mt-4">
   <div class="row justify-content-center">
     <div class="col-md-7">
-      <div class="card shadow-lg rounded-4">
-        <div class="card-header bg-primary text-white fw-bold rounded-top-4">Tambah Obat</div>
+      <div class="card tambah-card">
+        <div class="card-header bg-primary text-white fw-bold rounded-top-4 judul-tambah">Tambah Obat</div>
         <div class="card-body">
           @if ($errors->any())
             <div class="alert alert-danger">
@@ -39,8 +40,8 @@
               <input type="date" name="expired_date" id="expired_date" class="form-control" required>
             </div>
             <div class="d-flex justify-content-between gap-2">
-              <button type="submit" class="btn btn-success px-4">Simpan</button>
-              <a href="{{ route('obat.index') }}" class="btn btn-secondary px-4">Batal</a>
+              <button type="submit" class="btn btn-simpan px-4">Simpan</button>
+              <a href="{{ route('obat.index') }}" class="btn btn-batal px-4">Batal</a>
             </div>
           </form>
         </div>

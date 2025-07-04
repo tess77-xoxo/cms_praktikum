@@ -13,6 +13,19 @@ class ObatController extends Controller
     public function index()
     {
         $obats = Obat::all();
+        foreach ($obats as $obat) {
+            if ($obat->images && $obat->images->count()) {
+                $obat->gambar_obat = 'storage/' . $obat->images->first()->path;
+            } else {
+                $slug = strtolower(str_replace(' ', '-', $obat->nama_obat ?? $obat->nama ?? ''));
+                $imgPath = 'images/' . $slug . '.png';
+                if (file_exists(public_path($imgPath))) {
+                    $obat->gambar_obat = $imgPath;
+                } else {
+                    $obat->gambar_obat = 'images/no-image.png';
+                }
+            }
+        }
         return view('obat.index', compact('obats'));
     }
 
@@ -42,7 +55,6 @@ class ObatController extends Controller
             'stok' => $request->stok,
             'harga' => $request->harga,
             'expired_date' => $request->expired_date,
-            // tambahkan field lain jika ada
         ]);
 
         // Simpan gambar jika ada
@@ -54,8 +66,8 @@ class ObatController extends Controller
             ]);
         }
 
-        // Redirect dengan pesan sukses
-        return redirect('/obat')->with('success', 'Data obat berhasil ditambahkan');
+        // Redirect ke halaman struk
+        return redirect()->route('obat.struk', $obat->id);
     }
 
     // Tampilkan detail 1 obat
@@ -120,5 +132,23 @@ class ObatController extends Controller
         $obat->delete();
 
         return redirect()->route('obat.index')->with('success', 'Data obat berhasil dihapus');
+    }
+
+    // Tampilkan halaman stok obat
+    public function stok()
+    {
+        $namaObats = ['paracetamol', 'amoxilin', 'vitamin'];
+        $stokObats = [];
+        foreach ($namaObats as $nama) {
+            $stokObats[ucfirst($nama)] = Obat::whereRaw('LOWER(nama_obat) = ?', [$nama])->sum('stok');
+        }
+        return view('obat.stok', compact('stokObats'));
+    }
+
+    // Tampilkan struk obat
+    public function struk($id)
+    {
+        $obat = Obat::findOrFail($id);
+        return view('obat.struk', compact('obat'));
     }
 }
